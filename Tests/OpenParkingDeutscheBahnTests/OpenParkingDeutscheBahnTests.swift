@@ -1,12 +1,18 @@
 import XCTest
-@testable import OpenParkingDeutscheBahn
+import OpenParkingDeutscheBahn
 
 final class OpenParkingDeutscheBahnTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(OpenParkingDeutscheBahn().text, "Hello, World!")
+    func testExample() throws {
+        guard let token = ProcessInfo.processInfo.environment["DB_TOKEN"] else {
+            XCTFail("No access token found in environment")
+            return
+        }
+
+        let data = try DeutscheBahn(accessToken: token).data()
+        XCTAssert(!data.lots.isEmpty)
+        for lot in data.lots {
+            print(lot)
+        }
     }
 
     static var allTests = [
