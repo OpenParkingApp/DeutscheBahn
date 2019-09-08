@@ -53,16 +53,28 @@ public class DeutscheBahn: Datasource {
                 free = 51...allocation.allocation.capacity
             }
 
+            var kind: Lot.Kind = .lot
+            switch item.spaceType {
+            case .deck, .structure:
+                kind = .structure
+            case .lot:
+                kind = .lot
+            case .street:
+                kind = .street
+            case .underground:
+                kind = .underground
+            }
+
             return Lot(dataAge: allocation.allocation.timestamp.date(withFormat: .isoNoTimezone),
                        name: item.name,
                        coordinates: Coordinates(lat: item.geoLocation.latitude, lng: item.geoLocation.longitude),
                        city: item.address.cityName,
                        region: nil,
-                       address: "\(item.address.street) \(item.address.postalCode) \(item.address.cityName)",
+                       address: item.address.street,
                        free: .range(free),
                        total: allocation.allocation.capacity,
                        state: .open,
-                       kind: .lot, // TODO
+                       kind: kind,
                        detailURL: URL(string: item.url),
                        additionalInformation: [
                            "address_supplement": item.address.supplement as Any
