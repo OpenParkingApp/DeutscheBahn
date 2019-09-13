@@ -42,13 +42,17 @@ public class DeutscheBahn: Datasource {
             // TODO: Check allocation.allocation.validData to be true - Do what otherwise?
 
             var available: ClosedRange<Int> = 0...1
+            let capacity = allocation.allocation.capacity
             switch allocation.allocation.text {
             case .lte10:
-                available = 0...10
+                let upperBound = capacity < 10 ? capacity : 10
+                available = 0...upperBound
             case .gt10:
-                available = 11...30
+                let upperBound = capacity < 30 ? capacity : 30
+                available = 11...upperBound
             case .gt30:
-                available = 31...50
+                let upperBound = capacity < 50 ? capacity : 50
+                available = 31...upperBound
             case .gt50:
                 available = 51...allocation.allocation.capacity
             }
