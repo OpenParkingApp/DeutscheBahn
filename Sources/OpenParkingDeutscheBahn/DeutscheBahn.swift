@@ -41,16 +41,16 @@ public class DeutscheBahn: Datasource {
 
             // TODO: Check allocation.allocation.validData to be true - Do what otherwise?
 
-            var free: ClosedRange<Int> = 0...1
+            var available: ClosedRange<Int> = 0...1
             switch allocation.allocation.text {
             case .lte10:
-                free = 0...10
+                available = 0...10
             case .gt10:
-                free = 11...30
+                available = 11...30
             case .gt30:
-                free = 31...50
+                available = 31...50
             case .gt50:
-                free = 51...allocation.allocation.capacity
+                available = 51...allocation.allocation.capacity
             }
 
             var kind: Lot.Kind = .lot
@@ -71,8 +71,8 @@ public class DeutscheBahn: Datasource {
                        city: item.address.cityName,
                        region: nil,
                        address: item.address.street,
-                       free: .range(free),
-                       total: allocation.allocation.capacity,
+                       available: .range(available),
+                       capacity: allocation.allocation.capacity,
                        state: .open,
                        kind: kind,
                        detailURL: URL(string: item.url),
