@@ -39,7 +39,9 @@ public class DeutscheBahn: Datasource {
         let lots = data.map { arg -> LotResult in
             let (item, allocation) = arg
 
-            // TODO: Check allocation.allocation.validData to be true - Do what otherwise?
+            guard allocation.allocation.validData else {
+                return .failure(.other(reason: "API reported data to be invalid, whatever that means."))
+            }
 
             var available: ClosedRange<Int> = 0...1
             let capacity = allocation.allocation.capacity
