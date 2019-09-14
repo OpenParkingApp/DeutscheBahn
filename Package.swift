@@ -24,6 +24,6 @@ let package = Package(
             dependencies: ["OpenParkingBase"]),
         .testTarget(
             name: "OpenParkingDeutscheBahnTests",
-            dependencies: ["OpenParkingDeutscheBahn"]),
+            dependencies: ["OpenParkingTests", "OpenParkingDeutscheBahn"]),
     ]
 )

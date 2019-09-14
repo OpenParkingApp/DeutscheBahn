@@ -36,7 +36,7 @@ public class DeutscheBahn: Datasource {
             }
         }
 
-        let lots = data.map { arg -> Lot in
+        let lots = data.map { arg -> LotResult in
             let (item, allocation) = arg
 
             // TODO: Check allocation.allocation.validData to be true - Do what otherwise?
@@ -57,32 +57,32 @@ public class DeutscheBahn: Datasource {
                 available = 51...allocation.allocation.capacity
             }
 
-            var kind: Lot.Kind = .lot
+            var type: Lot.LotType = .lot
             switch item.spaceType {
             case .deck, .structure:
-                kind = .structure
+                type = .structure
             case .lot:
-                kind = .lot
+                type = .lot
             case .street:
-                kind = .street
+                type = .street
             case .underground:
-                kind = .underground
+                type = .underground
             }
 
-            return Lot(dataAge: allocation.allocation.timestamp.date(withFormat: .isoNoTimezone),
-                       name: item.name,
-                       coordinates: Coordinates(lat: item.geoLocation.latitude, lng: item.geoLocation.longitude),
-                       city: item.address.cityName,
-                       region: nil,
-                       address: item.address.street,
-                       available: .range(available),
-                       capacity: allocation.allocation.capacity,
-                       state: .open,
-                       kind: kind,
-                       detailURL: URL(string: item.url),
-                       additionalInformation: [
-                           "address_supplement": item.address.supplement as Any
-                       ])
+            return .success(Lot(dataAge: allocation.allocation.timestamp.date(withFormat: .isoNoTimezone),
+                                name: item.name,
+                                coordinates: Coordinates(lat: item.geoLocation.latitude, lng: item.geoLocation.longitude),
+                                city: item.address.cityName,
+                                region: nil,
+                                address: item.address.street,
+                                available: .range(available),
+                                capacity: allocation.allocation.capacity,
+                                state: .open,
+                                type: type,
+                                detailURL: URL(string: item.url),
+                                additionalInformation: [
+                                    "address_supplement": item.address.supplement as Any
+                                ]))
         }
 
         return DataPoint(lots: lots)
@@ -92,7 +92,8 @@ public class DeutscheBahn: Datasource {
         let url = URL(string: spacesURL.absoluteString + "?limit=1000")!
         let (data, response) = try get(url: url, headers: authHeader)
         guard response.statusCode == 200 else {
-            throw OpenParkingError.server(status: response.statusCode)
+            let resp = String(data: data, encoding: .utf8) ?? "n/a"
+            throw OpenParkingError.server(status: response.statusCode, response: resp)
         }
         return try JSONDecoder().decode(Spaces.self, from: data)
     }
@@ -100,7 +101,8 @@ public class DeutscheBahn: Datasource {
     func getOccupancies() throws -> Occupancies {
         let (data, response) = try get(url: occupanciesURL, headers: authHeader)
         guard response.statusCode == 200 else {
-            throw OpenParkingError.server(status: response.statusCode)
+            let resp = String(data: data, encoding: .utf8) ?? "n/a"
+            throw OpenParkingError.server(status: response.statusCode, response: resp)
         }
         return try JSONDecoder().decode(Occupancies.self, from: data)
     }

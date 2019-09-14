@@ -1,21 +1,17 @@
 import XCTest
+import OpenParkingTests
 import OpenParkingDeutscheBahn
 
 final class OpenParkingDeutscheBahnTests: XCTestCase {
-    func testExample() throws {
+    func testDatasource() throws {
         guard let token = ProcessInfo.processInfo.environment["DB_TOKEN"] else {
             XCTFail("No access token found in environment")
             return
         }
-
-        let data = try DeutscheBahn(accessToken: token).data()
-        XCTAssert(!data.lots.isEmpty)
-        for lot in data.lots {
-            print(lot)
-        }
+        assert(datasource: DeutscheBahn(accessToken: token))
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testDatasource", testDatasource),
     ]
 }
