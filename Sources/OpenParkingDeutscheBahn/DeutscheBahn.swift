@@ -36,16 +36,21 @@ public class DeutscheBahn: Datasource {
             }
         }
 
-        let lots = data.map { arg -> LotResult in
+        let lots = data.compactMap { arg -> LotResult? in
             let (item, allocation) = arg
 
             guard allocation.allocation.validData else {
-                return .failure(.other(reason: "API reported data to be invalid, whatever that means."))
+                warn("API reported data to be invalid, disregarding this value.", lotName: item.nameDisplay, lotCity: item.address.cityName)
+                return nil
             }
 
             var available: ClosedRange<Int> = 0...1
             let capacity = allocation.allocation.capacity
-            switch allocation.allocation.text {
+            guard let allocationText = allocation.allocation.text else {
+                warn("API has no current data, disregarding this value.", lotName: item.name, lotCity: item.address.cityName)
+                return nil
+            }
+            switch allocationText {
             case .lte10:
                 let upperBound = capacity < 10 ? capacity : 10
                 available = 0...upperBound
