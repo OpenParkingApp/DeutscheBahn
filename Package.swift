@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -24,6 +24,9 @@ let package = Package(
             dependencies: ["OpenParkingBase"]),
         .testTarget(
             name: "OpenParkingDeutscheBahnTests",
-            dependencies: ["OpenParkingTests", "OpenParkingDeutscheBahn"]),
+            dependencies: [
+                "OpenParkingDeutscheBahn",
+                .product(name: "OpenParkingTests", package: "OpenParkingBase"),
+            ]),
     ]
 )
