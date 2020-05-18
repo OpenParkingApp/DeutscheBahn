@@ -40,14 +40,14 @@ public class DeutscheBahn: Datasource {
             let (item, allocation) = arg
 
             guard allocation.allocation.validData else {
-                warn("API reported data to be invalid, disregarding this value.", lotName: item.nameDisplay, lotCity: item.address.cityName)
+                warn("API reported data to be invalid, disregarding this value.", lotName: item.nameDisplay)
                 return nil
             }
 
             var available: ClosedRange<Int> = 0...1
             let capacity = allocation.allocation.capacity
             guard let allocationText = allocation.allocation.text else {
-                warn("API has no current data, disregarding this value.", lotName: item.name, lotCity: item.address.cityName)
+                warn("API has no current data, disregarding this value.", lotName: item.name)
                 return nil
             }
             switch allocationText {
