@@ -87,7 +87,12 @@ public class DeutscheBahn: Datasource {
                                 state: .open,
                                 type: type,
                                 detailURL: URL(string: item.url),
+                                openingHours: .init(
+                                    url: nil,
+                                    times: item.openingHours
+                                ),
                                 additionalInformation: [
+                                    // TODO: This should contain lots of extra data
                                     "address_supplement": item.address.supplement as Any
                                 ]))
         }
