@@ -8,6 +8,7 @@ final class OpenParkingDeutscheBahnTests: XCTestCase {
             XCTFail("No access token found in environment")
             return
         }
-        assert(datasource: DeutscheBahn(accessToken: token))
+        assert(datasource: DeutscheBahn(accessToken: token),
+               ignoreDataAge: true) // Unfortunately data ages can't be trusted with this dataset.
     }
 }
