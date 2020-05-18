@@ -22,11 +22,11 @@ struct Spaces: Codable {
         let openingHours: String?
         let numberParkingPlaces: String
         let numberHandicapedPlaces: String?
-        let hasHandicapedPlaces: Bool
-        let isOutOfService: Bool
-        let hasReservation: Bool
-        let hasPrognosis: Bool
-        let hasChargingStation: Bool
+        let hasHandicapedPlaces: Bool?
+        let isOutOfService: Bool?
+        let hasReservation: Bool?
+        let hasPrognosis: Bool?
+        let hasChargingStation: Bool?
         let spaceInfo: SpaceInfo
         let tariffPrices: [TariffPrice]
 
