@@ -10,8 +10,4 @@ final class OpenParkingDeutscheBahnTests: XCTestCase {
         }
         assert(datasource: DeutscheBahn(accessToken: token))
     }
-
-    static var allTests = [
-        ("testDatasource", testDatasource),
-    ]
 }
