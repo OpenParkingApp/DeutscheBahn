@@ -32,7 +32,7 @@ public class DeutscheBahn: Datasource {
             if let space = spaces.items.first(where: { $0.id == allocation.space.id }) {
                 data.append((space, allocation))
             } else {
-                print("No space found for \(allocation.space.name)")
+                warning("No space found occupancy data", lotName: allocation.space.name)
             }
         }
 
