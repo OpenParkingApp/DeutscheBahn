@@ -1,11 +1,11 @@
 import Foundation
-import OpenParkingBase
+import Datasource
 
 public class DeutscheBahn: Datasource {
     public let name = "Deutsche Bahn"
     public let slug = "deutschebahn"
 
-    public let infoUrl = URL(string: "https://data.deutschebahn.com/dataset/api-parkplatz")!
+    public let infoURL = URL(string: "https://data.deutschebahn.com/dataset/api-parkplatz")!
 
     let spacesURL = URL(string: "https://api.deutschebahn.com/bahnpark/v1/spaces")!
     let occupanciesURL = URL(string: "https://api.deutschebahn.com/bahnpark/v1/spaces/occupancies")!
@@ -40,14 +40,14 @@ public class DeutscheBahn: Datasource {
             let (item, allocation) = arg
 
             guard allocation.allocation.validData else {
-                warn("API reported data to be invalid, disregarding this value.", lotName: item.nameDisplay)
+                warning("API reported data to be invalid, disregarding this value.", lotName: item.nameDisplay)
                 return nil
             }
 
             var available: ClosedRange<Int> = 0...1
             let capacity = allocation.allocation.capacity
             guard let allocationText = allocation.allocation.text else {
-                warn("API has no current data, disregarding this value.", lotName: item.name)
+                warning("API has no current data, disregarding this value.", lotName: item.name)
                 return nil
             }
             switch allocationText {
@@ -87,10 +87,7 @@ public class DeutscheBahn: Datasource {
                                 state: .open,
                                 type: type,
                                 detailURL: URL(string: item.url),
-                                openingHours: .init(
-                                    url: nil,
-                                    times: item.openingHours
-                                ),
+                                openingHours: item.openingHours.map { .init(times: $0) },
                                 additionalInformation: [
                                     // TODO: This should contain lots of extra data
                                     "address_supplement": item.address.supplement as Any
